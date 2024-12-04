@@ -1,4 +1,0 @@
-Flask==3.0.2
-flask_cors==4.0.0
-pycaw==20240210
-pywin32==306
