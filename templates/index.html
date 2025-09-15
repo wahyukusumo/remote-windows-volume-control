@@ -1,3 +1,5 @@
+{% import 'macros.html' as macros %}
+
 <!DOCTYPE html>
 <html lang="en">
 
@@ -6,13 +8,47 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Remote Volume Windows</title>
   <link href="{{ url_for('static', filename='output.css') }}" rel="stylesheet">
-  <script src="https://unpkg.com/htmx.org@2.0.3"></script>
+  <script src="{{ url_for('static', filename='htmx.min.js') }}"></script> <!-- HTMX v2.0.7 -->
 </head>
 
 <body class="font-lexend-deca">
   <div class="h-screen flex flex-col items-center justify-center p-5 bg-gray-950 lg:px-[40vw]">
     <h1 class="text-white">Volume Control</h1>
-    <div class="w-full">
+
+    <div class="flex gap-4">
+      {% for audio in processes %}
+      <div class="flex flex-col items-center gap-4 mx-2">
+
+        <form hx-post="/" hx-trigger="input from:form delay:120ms" hx-target="#vol-value-{{loop.index}}"
+          hx-swap="textContent" class="absolute">
+          <input type="text" name="name" value="{{ audio.name }}" hidden>
+
+          <input type="range" name="volume" min="0.0" max="1.0" step="0.01" value="{{ audio.volume }}"
+            oninput="linkSliderToBox(this, 'vol-{{loop.index}}')" class="w-12 h-60 opacity-0 cursor-pointer"
+            style="writing-mode: vertical-rl; direction: rtl">
+        </form>
+
+        <!-- 💻 This is display div -->
+        <div class="flex items-end w-12 h-60 gap-1 bg-pink-400">
+          <div id="vol-{{loop.index}}" class="bg-sky-400 w-full border-t-8 border-t-white"
+            style="height: {{audio.volume | map_range}}%;">
+          </div>
+        </div>
+
+        <!-- 👇 This is the value htmx will send -->
+        <span id="vol-value-{{loop.index}}" hidden>{{ audio.volume | map_range }}</span>
+
+        {{ macros.spotifyIcon() }}
+        {{ macros.discordIcon() }}
+
+        <span class="text-white">{{ audio.name.replace('.exe', '') }}</span>
+      </div>
+      {% endfor %}
+    </div>
+
+
+    <!-- THIS IS HORIZONTAL VOLUME SLIDER -->
+    <!-- <div class="w-full">
       {% for audio in processes %}
       <div class="flex flex-col my-4 bg-gray-200 rounded-lg">
         <div class="p-1 px-2 text-sm">{{ audio.name }}</div>
@@ -22,12 +58,19 @@
             <input type="range" name="volume" class="accent-gray-100 w-full" min="0.0" max="1.0" step="0.01"
               value="{{ audio.volume }}">
           </form>
-          <span class="px-2 w-12 text-center" id="vol-{{loop.index }}">{{ audio.volume | map_range }}</span>
+          <span class="px-2 w-12 text-center" id="vol-{{loop.index}}">{{ audio.volume | map_range }}</span>
         </div>
       </div>
       {% endfor %}
-    </div>
+    </div> -->
   </div>
+
+  <script>
+    function linkSliderToBox(slider, boxId) {
+      const box = document.getElementById(boxId);
+      box.style.height = (slider.value * 100) + "%";
+    }
+  </script>
 </body>
 
 </html>
