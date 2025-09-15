@@ -9,13 +9,13 @@
   <script src="https://unpkg.com/htmx.org@2.0.3"></script>
 </head>
 
-<body>
+<body class="font-lexend-deca">
   <div class="h-screen flex flex-col items-center justify-center p-5 bg-gray-950 lg:px-[40vw]">
-    <h1 class="text-white font-bold">Volume Control</h1>
+    <h1 class="text-white">Volume Control</h1>
     <div class="w-full">
       {% for audio in processes %}
       <div class="flex flex-col my-4 bg-gray-200 rounded-lg">
-        <div class="p-1 px-2 text-sm font-semibold">{{ audio.name }}</div>
+        <div class="p-1 px-2 text-sm">{{ audio.name }}</div>
         <div class="flex items-center rounded-b-lg bg-gray-400 p-2">
           <form hx-post="/" hx-trigger="change" hx-target="#vol-{{loop.index}}" hx-swap="textContent" class="w-full">
             <input type="text" name="name" value="{{ audio.name }}" hidden>

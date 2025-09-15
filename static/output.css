@@ -20,6 +20,7 @@
     --radius-lg: 0.5rem;
     --default-font-family: var(--font-sans);
     --default-mono-font-family: var(--font-mono);
+    --font-lexend-deca: "Lexend Deca", sans-serif;
   }
 }
 @layer base {
@@ -210,6 +211,9 @@
   .rounded-lg {
     border-radius: var(--radius-lg);
   }
+  .rounded-none {
+    border-radius: 0;
+  }
   .rounded-b-lg {
     border-bottom-right-radius: var(--radius-lg);
     border-bottom-left-radius: var(--radius-lg);
@@ -242,6 +246,9 @@
   .text-center {
     text-align: center;
   }
+  .font-lexend-deca {
+    font-family: var(--font-lexend-deca);
+  }
   .text-sm {
     font-size: var(--text-sm);
     line-height: var(--tw-leading, var(--text-sm--line-height));
@@ -263,6 +270,9 @@
   .accent-gray-100 {
     accent-color: var(--color-gray-100);
   }
+  .opacity-5 {
+    opacity: 5%;
+  }
   .outline {
     outline-style: var(--tw-outline-style);
     outline-width: 1px;
@@ -272,6 +282,12 @@
       padding-inline: 40vw;
     }
   }
+}
+@font-face {
+  font-family: "Lexend Deca";
+  src: url('./LexendDeca-Regular.ttf') format('truetype');
+  font-weight: normal;
+  font-style: normal;
 }
 @property --tw-border-style {
   syntax: "*";

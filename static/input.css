@@ -1,1 +1,12 @@
 @import "tailwindcss";
+
+@font-face {
+    font-family: "Lexend Deca";
+    src: url('./LexendDeca-Regular.ttf') format('truetype');
+    font-weight: normal;
+    font-style: normal;
+}
+
+@theme {
+    --font-lexend-deca: "Lexend Deca", sans-serif; 
+}
