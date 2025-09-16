@@ -6,6 +6,7 @@
 'firefox': macros.firefoxIcon(),
 'steam': macros.steamIcon(),
 'explorer': macros.explolerIcon(),
+'vlc': macros.vlcIcon(),
 } %}
 
 <!DOCTYPE html>
@@ -19,7 +20,7 @@
   <script src="{{ url_for('static', filename='htmx.min.js') }}"></script> <!-- HTMX v2.0.7 -->
 </head>
 
-<body class="font-lexend-deca">
+<body class="font-lexend-deca h-screen">
   <div class="h-screen flex flex-col items-center justify-center p-5 bg-gray-950 lg:px-[40vw]">
     {{ macros.brandIcon() }}
     <h1 class="text-white mb-10">Volume Control</h1>
@@ -48,9 +49,11 @@
         <!-- 👇 This is the value htmx will send -->
         <span id="vol-value-{{loop.index}}" hidden>{{ audio.volume | map_range }}</span>
 
+        {% if macro_map[program.lower()] %}
         {{ macro_map[program.lower()] }}
-
-        <!-- <span class="text-white">{{ program.capitalize() }}</span> -->
+        {% else %}
+        <span class="text-white">{{ program.capitalize() }}</span>
+        {% endif %}
       </div>
       {% endfor %}
     </div>
