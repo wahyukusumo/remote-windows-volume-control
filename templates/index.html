@@ -1,12 +1,13 @@
-{% import 'macros.html' as macros %}
+{% import 'icons.html' as icon %}
 
-{% set macro_map = {
-'spotify': macros.spotifyIcon(),
-'discord': macros.discordIcon(),
-'firefox': macros.firefoxIcon(),
-'steam': macros.steamIcon(),
-'explorer': macros.explolerIcon(),
-'vlc': macros.vlcIcon(),
+{% set icons = {
+'spotify': icon.spotify(),
+'discord': icon.discord(),
+'firefox': icon.firefox(),
+'steam': icon.steam(),
+'steamwebhelper': icon.steam(),
+'explorer': icon.exploler(),
+'vlc': icon.vlc(),
 } %}
 
 <!DOCTYPE html>
@@ -22,7 +23,7 @@
 
 <body class="font-lexend-deca h-screen">
   <div class="h-screen flex flex-col items-center justify-center p-5 bg-gray-950 lg:px-[40vw]">
-    {{ macros.brandIcon() }}
+    {{ icon.brand() }}
     <h1 class="text-white mb-10">Volume Control</h1>
 
     <div class="flex gap-4">
@@ -49,8 +50,8 @@
         <!-- 👇 This is the value htmx will send -->
         <span id="vol-value-{{loop.index}}" hidden>{{ audio.volume | map_range }}</span>
 
-        {% if macro_map[program.lower()] %}
-        {{ macro_map[program.lower()] }}
+        {% if icons[program.lower()] %}
+        {{ icons[program.lower()] }}
         {% else %}
         <span class="text-white">{{ program.capitalize() }}</span>
         {% endif %}
