@@ -3,6 +3,7 @@ from pycaw.pycaw import AudioUtilities, ISimpleAudioVolume
 from flask import Flask, request, render_template
 from flask_cors import CORS
 
+VERSION = 1.7
 
 # instantiate the app
 app = Flask(__name__)
@@ -23,13 +24,8 @@ def set_volume(process_name, volume):
 
 
 @app.template_filter()
-def map_range(value):
-    inMin = 0.0
-    inMax = 1.0
-    outMin = 0
-    outMax = 100
-    calculate = (value - inMin) * (outMax - outMin) / (inMax - inMin) + outMin
-    return round(calculate)
+def map_range(value: float) -> int:
+    return round(value * 100)
 
 
 @app.route("/", methods=["GET", "POST"])
