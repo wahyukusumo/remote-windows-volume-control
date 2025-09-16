@@ -17,20 +17,23 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Remote Volume Windows</title>
+  <link rel="shortcut icon" href="{{ url_for('static', filename='favicon/favicon.ico') }}">
   <link href="{{ url_for('static', filename='output.css') }}" rel="stylesheet">
   <script src="{{ url_for('static', filename='htmx.min.js') }}"></script> <!-- HTMX v2.0.7 -->
 </head>
 
-<body class="font-lexend-deca h-screen">
-  <div class="h-screen flex flex-col items-center justify-center p-5 bg-gray-950 lg:px-[40vw]">
-    {{ icon.brand() }}
-    <h1 class="text-white mb-10">Volume Control</h1>
+<body class="font-lexend-deca m-0 bg-gray-950 overflow-hidden">
+  <div class="h-screen flex flex-col justify-center items-center overflow-hidden">
 
-    <div class="flex gap-4">
+    {{ icon.brand() }}
+    <h1 class="text-white mb-10">— Volume Control —</h1>
+
+    <div class="flex gap-4 py-5 max-w-72 lg:max-w-none overflow-x-auto">
       {% for audio in processes %}
       {% set program = audio.name.replace('.exe', '') %}
-      <div class="flex flex-col items-center gap-4 mx-2">
+      <div class="flex flex-col items-center gap-4 mx-2 relative">
 
+        <!-- 📄 This is input range form -->
         <form hx-post="/" hx-trigger="input from:form delay:120ms" hx-target="#vol-value-{{loop.index}}"
           hx-swap="textContent" class="absolute">
           <input type="text" name="name" value="{{ audio.name }}" hidden>
