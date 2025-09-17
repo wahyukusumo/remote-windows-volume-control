@@ -6,8 +6,9 @@
 'firefox': icon.firefox(),
 'steam': icon.steam(),
 'steamwebhelper': icon.steam(),
-'explorer': icon.exploler(),
+'explorer': icon.explorer(),
 'vlc': icon.vlc(),
+'master': icon.master(),
 } %}
 
 <!DOCTYPE html>
@@ -46,17 +47,18 @@
         <!-- 💻 This is display div -->
         <div class="flex items-end w-12 h-60 gap-1 bg-pink-400">
           <div id="vol-{{loop.index}}" class="bg-sky-400 w-full border-t-8 border-t-white"
-            style="height: {{audio.volume | map_range}}%;">
+            style="height: {{audio.volume | percentify}}%;">
           </div>
         </div>
 
-        <!-- 👇 This is the value htmx will send -->
-        <span id="vol-value-{{loop.index}}" hidden>{{ audio.volume | map_range }}</span>
+        <span id="vol-value-{{loop.index}}" class="text-white">{{ audio.volume | percentify }}</span>
 
-        {% if icons[program.lower()] %}
-        {{ icons[program.lower()] }}
-        {% else %}
-        <span class="text-white">{{ program.capitalize() }}</span>
+        <span>
+          {% if icons[program.lower()] %}
+          {{ icons[program.lower()] }}
+          {% else %}
+          <span class="text-white">{{ program.capitalize() }}</span>
+        </span>
         {% endif %}
       </div>
       {% endfor %}
@@ -74,7 +76,7 @@
             <input type="range" name="volume" class="accent-gray-100 w-full" min="0.0" max="1.0" step="0.01"
               value="{{ audio.volume }}">
           </form>
-          <span class="px-2 w-12 text-center" id="vol-{{loop.index}}">{{ audio.volume | map_range }}</span>
+          <span class="px-2 w-12 text-center" id="vol-{{loop.index}}">{{ audio.volume | percentify }}</span>
         </div>
       </div>
       {% endfor %}
