@@ -5,7 +5,6 @@
 'discord': icon.discord(),
 'firefox': icon.firefox(),
 'steam': icon.steam(),
-'steamwebhelper': icon.steam(),
 'explorer': icon.explorer(),
 'vlc': icon.vlc(),
 'master': icon.master(),
@@ -24,42 +23,58 @@
 </head>
 
 <body class="font-lexend-deca m-0 bg-gray-950 overflow-hidden">
+  <button class="absolute top-3 right-3" onclick="toggleHideButton()">
+    <span id="main-eye">{{ icon.eye() }}</span>
+    <span id="main-eye-slash" class="hidden">{{ icon.eye_slashed() }}</span>
+  </button>
+
   <div class="h-screen flex flex-col justify-center items-center overflow-hidden">
 
-    {{ icon.brand() }}
-    <h1 class="text-white mb-10">— Volume Control —</h1>
+    <div class="flex flex-col justify-center items-center mb-10">
+      {{ icon.brand() }}
+      <h1 class="text-white">— Volume Control —</h1>
+      <span class="text-gray-400">v{{ version }}</span>
+    </div>
 
-    <div class="flex gap-4 py-5 max-w-72 lg:max-w-none overflow-x-auto">
+    <div class="flex gap-4 py-10 max-w-72 lg:max-w-none overflow-x-auto">
       {% for audio in processes %}
       {% set program = audio.name.replace('.exe', '') %}
-      <div class="flex flex-col items-center gap-4 mx-2 relative">
 
+      <div class="flex flex-col items-center gap-4 mx-2 relative" id="{{ program }}" name="slider">
         <!-- 📄 This is input range form -->
-        <form hx-post="/" hx-trigger="input from:form delay:120ms" hx-target="#vol-value-{{loop.index}}"
+        <form hx-post="/" hx-trigger="input from:form delay:120ms" hx-target="#vol-value-{{ loop.index }}"
           hx-swap="textContent" class="absolute">
           <input type="text" name="name" value="{{ audio.name }}" hidden>
 
           <input type="range" name="volume" min="0.0" max="1.0" step="0.01" value="{{ audio.volume }}"
-            oninput="linkSliderToBox(this, 'vol-{{loop.index}}')" class="w-12 h-60 opacity-0 cursor-pointer"
+            oninput="changeBoxColorHeight(this, 'vol-{{ loop.index }}')" class="w-12 h-60 opacity-0 cursor-pointer"
             style="writing-mode: vertical-rl; direction: rtl">
         </form>
 
         <!-- 💻 This is display div -->
         <div class="flex items-end w-12 h-60 gap-1 bg-pink-400">
-          <div id="vol-{{loop.index}}" class="bg-sky-400 w-full border-t-8 border-t-white"
+          <div id="vol-{{ loop.index }}" class="bg-sky-400 w-full border-t-8 border-t-white"
             style="height: {{audio.volume | percentify}}%;">
           </div>
         </div>
 
-        <span id="vol-value-{{loop.index}}" class="text-white">{{ audio.volume | percentify }}</span>
+        <span id="vol-value-{{loop.index}}" class="text-white hidden">{{ audio.volume | percentify }}</span>
 
-        <span>
+        <button class="hidden" name="toggle-program" onclick="toggleProgramVisibility('{{ program }}')">
+          <span id="{{ program }}-eye">{{ icon.eye() }}</span>
+          <span id="{{ program }}-eye-slash" class="hidden">{{ icon.eye_slashed() }}</span>
+        </button>
+
+        <span title="{{ program.capitalize() }}">
           {% if icons[program.lower()] %}
           {{ icons[program.lower()] }}
           {% else %}
-          <span class="text-white">{{ program.capitalize() }}</span>
+          <span class="text-white truncate h-14" style="writing-mode: vertical-rl;">
+            {{ program.capitalize() }}
+          </span>
         </span>
         {% endif %}
+
       </div>
       {% endfor %}
     </div>
@@ -84,10 +99,104 @@
   </div>
 
   <script>
-    function linkSliderToBox(slider, boxId) {
+    let isMainHidden = false;
+
+    function getHiddenPrograms() {
+      return JSON.parse(localStorage.getItem("hidden")) || [];
+    }
+
+    function toggleSliderButton() {
+      const buttons = document.getElementsByName('toggle-program');
+      buttons.forEach(button => {
+        button.classList.toggle('hidden');
+      });
+    }
+
+    function toggleEyeIcon(program) {
+      const eye = document.getElementById(`${program}-eye`);
+      const slash = document.getElementById(`${program}-eye-slash`);
+
+      eye.classList.toggle("hidden");
+      slash.classList.toggle("hidden");
+    }
+
+    function toggleHideButton() {
+      // This function is for main toggle button on top left corner
+      // Result: toggle visibility button programs slider 
+      isMainHidden = !isMainHidden;
+
+      toggleSliderButton();
+      toggleEyeIcon('main')
+
+      const programs = getHiddenPrograms();
+      if (programs.length > 0) {
+        programs.forEach(program => {
+          hideSlider(program);
+        })
+      }
+    }
+
+    function toggleProgramVisibility(item) {
+      // Get existing array or empty one
+      let hidden = getHiddenPrograms();
+
+      if (hidden.includes(item)) {
+        // Remove item
+        hidden = hidden.filter(i => i !== item);
+        showSlider(item);
+      } else {
+        // Add item
+        hidden.push(item);
+        hideSlider(item);
+      }
+
+      // Save back
+      localStorage.setItem("hidden", JSON.stringify(hidden));
+
+      return hidden; // return updated array if you want to use it
+    }
+
+    function changeBoxColorHeight(slider, boxId) {
       const box = document.getElementById(boxId);
       box.style.height = (slider.value * 100) + "%";
     }
+
+    function showSlider(name) {
+      const program = document.getElementById(name);
+
+      if (isMainHidden) {
+        program.classList.remove('hidden');
+        program.classList.remove('opacity-50')
+        toggleEyeIcon(name)
+      } else {
+        program.classList.remove('hidden');
+        toggleEyeIcon(name)
+      }
+    }
+
+    function hideSlider(name) {
+      const program = document.getElementById(name);
+
+      if (isMainHidden) {
+        program.classList.remove('hidden');
+        program.classList.add('opacity-50');
+        toggleEyeIcon(name)
+      } else {
+        program.classList.add('hidden');
+        toggleEyeIcon(name)
+      }
+    }
+
+    // Get list hidden program from local storage
+    // then apply display none to them when initialize the app
+    const programs = getHiddenPrograms();
+    if (programs.length > 0) {
+      programs.forEach(program => {
+        const element = document.getElementById(program);
+        element.classList.add('hidden');
+      })
+    }
+
   </script>
 </body>
 

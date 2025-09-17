@@ -4,7 +4,7 @@ from pycaw.pycaw import AudioUtilities, ISimpleAudioVolume, IAudioEndpointVolume
 from flask import Flask, request, render_template
 from flask_cors import CORS
 
-VERSION = 1.8
+VERSION = 1.9
 
 # instantiate the app
 app = Flask(__name__)
@@ -99,7 +99,7 @@ def audio():
 
         return str(percentify(program_volume))
     else:
-        return render_template("index.html", processes=processes)
+        return render_template("index.html", processes=processes, version=VERSION)
 
 
 if __name__ == "__main__":

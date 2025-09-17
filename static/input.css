@@ -10,3 +10,7 @@
 @theme {
     --font-lexend-deca: "Lexend Deca", sans-serif; 
 }
+
+button {
+    @apply hover:opacity-50 bg-stone-700 p-0.5 rounded-md cursor-pointer
+}
