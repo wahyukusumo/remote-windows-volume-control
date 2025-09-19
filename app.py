@@ -5,6 +5,8 @@ from flask import Flask, request, render_template
 from flask_cors import CORS
 
 VERSION = 1.9
+DEBUG = True
+PORT = 5001
 
 # instantiate the app
 app = Flask(__name__)
@@ -103,7 +105,7 @@ def audio():
 
 
 if __name__ == "__main__":
-    app.run(host="0.0.0.0", port=5001, use_reloader=True, debug=True)
+    app.run(host="0.0.0.0", port=PORT, use_reloader=True, debug=DEBUG)
 
     # print(get_master_volume())
     # set_master_volume(0.77)
