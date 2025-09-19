@@ -1,8 +1,21 @@
 # Remote Windows Volume Control
 
-This web app allows you to control the audio volume of your Windows PC through other devices on the same network.
-Now, I don't need to get out of bed just to decrease the volume.
+<p align="center">
+  <img src=".media/logo.webp" alt="Project's Logo"/>
+</p>
 
-![Screenshot](.media/Screenshot.png)
+This program lets you remotely control your Windows PC’s audio volume from any device on the same network.
+
+<sup><sub>_Now, I don't need to get out of bed just to decrease the volume. 💤_</sub></sup>
+
+### Demo
+
+![Screenshot](.media/Screenshot.webp)
 
 ![Recording](.media/record.gif)
+
+### Installation
+
+1. Clone or download this repository
+2. Run _setup.bat_ to install virtual environtment and install dependencies.
+3. Run _run.bat_ to run the program.
