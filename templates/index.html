@@ -17,7 +17,9 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Remote Volume Windows</title>
+  <link rel="manifest" href="{{ url_for('static', filename='manifest.json') }}">
   <link rel="shortcut icon" href="{{ url_for('static', filename='favicon/favicon.ico') }}">
+  <link rel="apple-touch-icon" href="{{ url_for('static', filename='favicon/apple-touch-icon.png') }}">
   <link href="{{ url_for('static', filename='output.css') }}" rel="stylesheet">
   <script src="{{ url_for('static', filename='htmx.min.js') }}"></script> <!-- HTMX v2.0.7 -->
 </head>
@@ -98,6 +100,7 @@
     </div> -->
   </div>
 
+  <script src="{{ url_for('static', filename='service-worker.js') }}"></script>
   <script>
     let isMainHidden = false;
 
@@ -195,6 +198,15 @@
         const element = document.getElementById(program);
         element.classList.add('hidden');
       })
+    }
+
+    if ("serviceWorker" in navigator) {
+      window.addEventListener("load", () => {
+        navigator.serviceWorker
+          .register("/static/service-worker.js")
+          .then(reg => console.log("Service Worker registered:", reg.scope))
+          .catch(err => console.error("Service Worker failed:", err));
+      });
     }
 
   </script>
