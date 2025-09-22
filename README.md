@@ -19,3 +19,7 @@ This program lets you remotely control your Windows PC’s audio volume from any
 1. Clone or download this repository
 2. Run _setup.bat_ to install virtual environtment and install dependencies.
 3. Run _run.bat_ to run the program.
+
+### License
+
+Remote Windows Volume Control is released under the [MIT license](./LICENSE).
