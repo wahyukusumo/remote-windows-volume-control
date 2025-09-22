@@ -6,10 +6,11 @@ from flask_cors import CORS
 
 VERSION = 1.9
 DEBUG = True
+HOST = "0.0.0.0"
 PORT = 5001
 
 # instantiate the app
-app = Flask(__name__)
+app = Flask(f"Remote Windows Volume Control v.{VERSION}")
 app.config.from_object(__name__)
 
 
@@ -104,8 +105,22 @@ def audio():
         return render_template("index.html", processes=processes, version=VERSION)
 
 
+def run_prod_server():
+    from waitress import serve
+
+    print(f"Remote Windows Volume Control v.{VERSION}")
+    print(f"✅ App is running at http://{HOST}:{PORT}")
+    serve(app, host=HOST, port=PORT)
+
+
+def run_dev_server():
+    app.run(host=HOST, port=PORT, use_reloader=True, debug=DEBUG)
+
+
 if __name__ == "__main__":
-    app.run(host="0.0.0.0", port=PORT, use_reloader=True, debug=DEBUG)
+    run_prod_server()
+
+    # run_dev_server()
 
     # print(get_master_volume())
     # set_master_volume(0.77)
