@@ -8,7 +8,8 @@ import os, sys
 import yaml
 
 VERSION = "2.0"
-NAME = f"WinVol-Network v.{VERSION}"
+NAME = "WinVol-Network"
+NAMEVER = f"WinVol-Network v.{VERSION}"
 
 
 def resource_path(relative_path):

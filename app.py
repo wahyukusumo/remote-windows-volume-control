@@ -108,15 +108,15 @@ def audio():
         return str(percentify(program_volume))
     else:
         return render_template(
-            "index.html", processes=processes, version=config.VERSION
+            "index.html", processes=processes, name=config.NAME, version=config.VERSION
         )
 
 
 def run_prod_server():
     from waitress import serve
 
-    print(config.NAME)
-    print(f"🚀 {config.NAME} is running at http://{HOST}:{PORT}")
+    print(config.NAMEVER)
+    print(f"🚀 Server is running at http://{HOST}:{PORT}")
     serve(APP, host=HOST, port=PORT)
 
 
