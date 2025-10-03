@@ -3,14 +3,27 @@ from comtypes import CLSCTX_ALL
 from pycaw.pycaw import AudioUtilities, ISimpleAudioVolume, IAudioEndpointVolume
 from flask import Flask, request, render_template
 from flask_cors import CORS
+import os, sys
 
 VERSION = 1.9
+NAME = f"Remote Windows Volume Control v.{VERSION}"
 DEBUG = True
 HOST = "0.0.0.0"
 PORT = 5001
 
+
+def resource_path(relative_path):
+    if hasattr(sys, "_MEIPASS"):  # PyInstaller exe
+        return os.path.join(sys._MEIPASS, relative_path)
+    return os.path.join(os.path.abspath("."), relative_path)
+
+
+template_folder = resource_path("templates")
+static_folder = resource_path("static")
+
+
 # instantiate the app
-app = Flask(f"Remote Windows Volume Control v.{VERSION}")
+app = Flask(NAME, template_folder=template_folder, static_folder=static_folder)
 app.config.from_object(__name__)
 
 
@@ -117,15 +130,15 @@ def run_dev_server():
     app.run(host=HOST, port=PORT, use_reloader=True, debug=DEBUG)
 
 
-if __name__ == "__main__":
-    run_prod_server()
+# if __name__ == "__main__":
+#     run_prod_server()
 
-    # run_dev_server()
+# run_dev_server()
 
-    # print(get_master_volume())
-    # set_master_volume(0.77)
-    # print(get_master_volume())
+# print(get_master_volume())
+# set_master_volume(0.77)
+# print(get_master_volume())
 
-    # programs = get_programs_volume()
-    # for program in programs:
-    #     print(f'{program['name']}: {percentify(program["volume"])}')
+# programs = get_programs_volume()
+# for program in programs:
+#     print(f'{program['name']}: {percentify(program["volume"])}')
