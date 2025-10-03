@@ -29,7 +29,7 @@ def on_exit(icon, item):
 if __name__ == "__main__":
     Thread(target=app.run_prod_server, daemon=True).start()  # For production server
     # Thread(target=app.run_dev_server, daemon=True).start() # For development server
-    image = Image.open("icon.png")
+    image = Image.open(config.resource_path("icon.png"))
     icon = pystray.Icon(
         __name__,
         image,
