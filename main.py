@@ -12,23 +12,12 @@ import pystray
 import webbrowser
 
 
-def get_exe_dir():
-    if getattr(sys, "frozen", False):  # Running as EXE
-        return os.path.dirname(sys.executable)
-    else:  # Running as script
-        return os.path.dirname(os.path.abspath(__file__))
-
-
 def on_open(icon, item):
     webbrowser.open(f"http://{app.HOST}:{config.config['port']}")
 
 
 def on_config(icon, item):
-    config_path = os.path.join(get_exe_dir(), "config.yaml")
-    if not os.path.exists(config_path):
-        # Create default one if file does not exist.
-        with open(config_path, "w") as f:
-            f.write("port: 5001")
+    config_path = config.initialize_config_file()
     os.startfile(config_path)
 
 
