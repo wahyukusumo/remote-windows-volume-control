@@ -9,9 +9,9 @@ Simple and lightweight Flask based program that let's you remotely control your 
 <sup><sub>_Now, I don't need to get out of bed just to decrease the volume. 💤_</sub></sup>
 
 ### Features
-- Change volumes 
-- Support PWA (Progressive Web Apps)*
-- Simple and lightweight
+- 🎚️ Controls volumes of your desktop PC with any devices
+- 📱 Support PWA (Progressive Web Apps)*
+- 📜 Simple and lightweight
 
 _* You need to setup your local network to serve https. Check [caddy](https://github.com/caddyserver/caddy)._
 
@@ -36,10 +36,17 @@ _* You need to setup your local network to serve https. Check [caddy](https://gi
 #### Build your own .exe
 1. Clone or download this repository
 2. Run _setup.bat_ to install virtual environtment and install dependencies. _(or do it manually)_
-3. Open terminal and use this
+3. Open terminal and use compile it using _pyinstaller_
+##### With [UPX](https://github.com/upx/upx)
 ```python
-pyinstaller --onefile --noconsole --add-data 'templates:templates' --add-data 'static:static' --icon=icon.ico --name="WinVol-Network" --clean --upx-dir C:\upx-5.0.2-win64 main.py
+pyinstaller --onefile --noconsole --add-data 'templates:templates' --add-data 'static:static' --icon=icon.ico --name="WinVol-Network" --clean --upx-dir C:\upx main.py
 ```
+
+##### Without [UPX](https://github.com/upx/upx)
+```python
+pyinstaller --onefile --noconsole --add-data 'templates:templates' --add-data 'static:static' --icon=icon.ico --name="WinVol-Network" --clean main.py
+```
+
 
 ### License
 
