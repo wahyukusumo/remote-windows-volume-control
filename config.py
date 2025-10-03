@@ -8,7 +8,7 @@ import os, sys
 import yaml
 
 VERSION = "2.0"
-NAME = f"Remote Windows Volume Control v.{VERSION}"
+NAME = f"WinVol-Network v.{VERSION}"
 
 
 def resource_path(relative_path):

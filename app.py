@@ -15,10 +15,8 @@ APP = config.flaskapp
 
 
 def get_master_volume() -> float:
-    """Get current main audio output volume
-
-    Returns:
-        current volume in float
+    """Get current main audio device volume
+    return: current volume (float)
     """
     devices = AudioUtilities.GetSpeakers()
     interface = devices.Activate(IAudioEndpointVolume._iid_, CLSCTX_ALL, None)
@@ -27,6 +25,10 @@ def get_master_volume() -> float:
 
 
 def set_master_volume(volume: float) -> None:
+    """Set main device audio volume
+    args: volume (float)
+    return: None
+    """
     devices = AudioUtilities.GetSpeakers()
     interface = devices.Activate(IAudioEndpointVolume._iid_, CLSCTX_ALL, None)
     volume_interface = interface.QueryInterface(IAudioEndpointVolume)
@@ -34,6 +36,10 @@ def set_master_volume(volume: float) -> None:
 
 
 def set_program_volume(program_name: str, volume: float) -> None:
+    """Change program volume by name
+    args: program name (str), new volume (float)
+    return: None
+    """
     sessions = AudioUtilities.GetAllSessions()
     for session in sessions:
         if session.Process and session.Process.name() == program_name:
@@ -41,7 +47,10 @@ def set_program_volume(program_name: str, volume: float) -> None:
             volume_interface.SetMasterVolume(float(volume), None)
 
 
-def get_programs_volume() -> dict:
+def get_programs_volume() -> list:
+    """Get list of volumes of active processes/programs.
+    return: list of dictionary with key name & volume
+    """
     programs = []
     sessions = AudioUtilities.GetAllSessions()
 
@@ -107,7 +116,7 @@ def run_prod_server():
     from waitress import serve
 
     print(config.NAME)
-    print(f"✅ App is running at http://{HOST}:{PORT}")
+    print(f"🚀 {config.NAME} is running at http://{HOST}:{PORT}")
     serve(APP, host=HOST, port=PORT)
 
 
