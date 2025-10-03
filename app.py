@@ -1,34 +1,17 @@
+"""app.py
+This file is for flask routes also function for changing volume
+"""
+
 import pythoncom
 from comtypes import CLSCTX_ALL
 from pycaw.pycaw import AudioUtilities, ISimpleAudioVolume, IAudioEndpointVolume
-from flask import Flask, request, render_template
-from flask_cors import CORS
-import os, sys
+from flask import request, render_template
+import config
 
-VERSION = 1.9
-NAME = f"Remote Windows Volume Control v.{VERSION}"
 DEBUG = True
 HOST = "0.0.0.0"
-PORT = 5001
-
-
-def resource_path(relative_path):
-    if hasattr(sys, "_MEIPASS"):  # PyInstaller exe
-        return os.path.join(sys._MEIPASS, relative_path)
-    return os.path.join(os.path.abspath("."), relative_path)
-
-
-template_folder = resource_path("templates")
-static_folder = resource_path("static")
-
-
-# instantiate the app
-app = Flask(NAME, template_folder=template_folder, static_folder=static_folder)
-app.config.from_object(__name__)
-
-
-# enable CORS
-CORS(app, resources={r"/*": {"origins": "*"}})
+PORT = config.config["port"]
+APP = config.flaskapp
 
 
 def get_master_volume() -> float:
@@ -84,12 +67,12 @@ def get_programs_volume() -> dict:
     return programs
 
 
-@app.template_filter()
+@APP.template_filter()
 def percentify(value: float) -> int:
     return round(value * 100)
 
 
-@app.route("/", methods=["GET", "POST"])
+@APP.route("/", methods=["GET", "POST"])
 def audio():
     pythoncom.CoInitialize()
     master_volume = [{"name": "Master", "volume": get_master_volume()}]
@@ -115,19 +98,21 @@ def audio():
 
         return str(percentify(program_volume))
     else:
-        return render_template("index.html", processes=processes, version=VERSION)
+        return render_template(
+            "index.html", processes=processes, version=config.VERSION
+        )
 
 
 def run_prod_server():
     from waitress import serve
 
-    print(f"Remote Windows Volume Control v.{VERSION}")
+    print(config.NAME)
     print(f"✅ App is running at http://{HOST}:{PORT}")
-    serve(app, host=HOST, port=PORT)
+    serve(APP, host=HOST, port=PORT)
 
 
 def run_dev_server():
-    app.run(host=HOST, port=PORT, use_reloader=True, debug=DEBUG)
+    APP.run(host=HOST, port=PORT, use_reloader=True, debug=DEBUG)
 
 
 # if __name__ == "__main__":
